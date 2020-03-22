@@ -37,28 +37,43 @@ class _LoginFormState extends State<LoginForm> {
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
           return Form(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'username'),
-                  controller: _usernameController,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'password'),
-                  controller: _passwordController,
-                  obscureText: true,
-                ),
-                RaisedButton(
-                  onPressed:
-                      state is! LoginLoading ? _onLoginButtonPressed : null,
-                  child: Text('Login'),
-                ),
-                Container(
-                  child: state is LoginLoading
-                      ? CircularProgressIndicator()
-                      : null,
-                ),
-              ],
+            child: Container(
+              margin: EdgeInsets.all(32.0),
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.person),
+                      labelText: 'username',
+                    ),
+                    controller: _usernameController,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(16.0),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.lock),
+                      labelText: 'password',
+                    ),
+                    controller: _passwordController,
+                    obscureText: true,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(70.0),
+                  ),
+                  RaisedButton(
+                    onPressed:
+                        state is! LoginLoading ? _onLoginButtonPressed : null,
+                    child: Text('Login'),
+                  ),
+                  Container(
+                    child: state is LoginLoading
+                        ? CircularProgressIndicator()
+                        : null,
+                  ),
+                ],
+              ),
             ),
           );
         },

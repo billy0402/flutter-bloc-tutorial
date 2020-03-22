@@ -26,10 +26,12 @@ dependencies:
   flutter_bloc: ^3.2.0
   equatable: ^1.1.1
   flare_splash_screen: ^3.0.1
+  http: ^0.12.0+4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito: ^4.1.1
 
 
 # For information on the generic Dart part of this file, see the

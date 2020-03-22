@@ -14,6 +14,10 @@ A new Flutter application.
 ## tutorial
 - [Bloc](https://bloclibrary.dev/#/zh-cn/)
 
+## [API](https://www.metaweather.com/api/)
+- [Location Search](https://www.metaweather.com/api/location/search/?query=taipei)
+- [Location Weather](https://www.metaweather.com/api/location/2306179/)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

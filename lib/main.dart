@@ -54,6 +54,7 @@ class App extends StatelessWidget {
       title: 'Flutter Bloc Tutorial',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.grey[500],
       ),
       home: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {

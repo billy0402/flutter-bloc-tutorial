@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../../settings/bloc/bloc.dart';
+
 class Temperature extends StatelessWidget {
   final double temperature;
   final double low;
   final double high;
+  final TemperatureUnit unit;
 
   Temperature({
     Key key,
     this.temperature,
     this.low,
     this.high,
+    this.unit,
   }) : super(key: key);
 
   @override
@@ -51,5 +55,8 @@ class Temperature extends StatelessWidget {
     );
   }
 
-  int _formattedTemperature(double t) => t.round();
+  int _formattedTemperature(double t) =>
+      unit == TemperatureUnit.celsius ? t.round() : _toFahrenheit(t);
+
+  int _toFahrenheit(double celsius) => ((celsius * 9 / 5) + 32).round();
 }

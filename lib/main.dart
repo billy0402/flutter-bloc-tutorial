@@ -12,6 +12,7 @@ import 'auth/user_repository.dart';
 import 'common/loading_indicator.dart';
 import 'home/home_page.dart';
 import 'login/login_page.dart';
+import 'settings/bloc/bloc.dart';
 import 'splash/splash_page.dart';
 import 'theme/bloc/bloc.dart';
 import 'utils/simple_bloc_delegate.dart';
@@ -36,6 +37,9 @@ void main() {
       ),
       BlocProvider<ThemeBloc>(
         create: (context) => ThemeBloc(),
+      ),
+      BlocProvider<SettingsBloc>(
+        create: (context) => SettingsBloc(),
       ),
     ],
     child: App(

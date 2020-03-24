@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../auth/bloc/bloc.dart';
+import '../settings/settings_page.dart';
 import '../weather/bloc/bloc.dart';
+import '../weather/city_selection.dart';
 import '../weather/weather_page.dart';
-import '../weather/widget/city_selection.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -27,6 +28,17 @@ class HomePage extends StatelessWidget {
                 BlocProvider.of<WeatherBloc>(context)
                     .add(FetchWeather(city: city));
               }
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingsPage(),
+                ),
+              );
             },
           ),
           IconButton(

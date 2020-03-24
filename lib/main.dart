@@ -13,6 +13,7 @@ import 'common/loading_indicator.dart';
 import 'home/home_page.dart';
 import 'login/login_page.dart';
 import 'splash/splash_page.dart';
+import 'theme/bloc/bloc.dart';
 import 'utils/simple_bloc_delegate.dart';
 import 'weather/bloc/bloc.dart';
 
@@ -26,10 +27,17 @@ void main() {
     ),
   );
 
-  runApp(BlocProvider<AuthBloc>(
-    create: (context) {
-      return AuthBloc(userRepository: userRepository)..add(AppStarted());
-    },
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<AuthBloc>(
+        create: (context) {
+          return AuthBloc(userRepository: userRepository)..add(AppStarted());
+        },
+      ),
+      BlocProvider<ThemeBloc>(
+        create: (context) => ThemeBloc(),
+      ),
+    ],
     child: App(
       userRepository: userRepository,
       weatherRepository: weatherRepository,
@@ -50,34 +58,35 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Bloc Tutorial',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.grey[500],
-      ),
-      home: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          if (state is AuthUninitialized) {
-            return SplashPage();
-          }
-          if (state is AuthAuthenticated) {
-            return BlocProvider(
-              create: (context) =>
-                  WeatherBloc(weatherRepository: weatherRepository),
-              child: HomePage(),
-            );
-          }
-          if (state is AuthUnauthenticated) {
-            return LoginPage(userRepository: userRepository);
-          }
-          if (state is AuthLoading) {
-            return LoadingIndicator();
-          }
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, themeState) {
+        return MaterialApp(
+          title: 'Flutter Bloc Tutorial',
+          theme: themeState.theme,
+          home: BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              if (state is AuthUninitialized) {
+                return SplashPage();
+              }
+              if (state is AuthAuthenticated) {
+                return BlocProvider(
+                  create: (context) =>
+                      WeatherBloc(weatherRepository: weatherRepository),
+                  child: HomePage(),
+                );
+              }
+              if (state is AuthUnauthenticated) {
+                return LoginPage(userRepository: userRepository);
+              }
+              if (state is AuthLoading) {
+                return LoadingIndicator();
+              }
 
-          return LoginPage(userRepository: userRepository);
-        },
-      ),
+              return LoginPage(userRepository: userRepository);
+            },
+          ),
+        );
+      },
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../common/loading_indicator.dart';
+import '../theme/bloc/bloc.dart';
 import 'bloc/bloc.dart';
 import 'widget/widget.dart';
 
@@ -26,6 +27,10 @@ class _WeatherPageState extends State<WeatherPage> {
       child: BlocConsumer<WeatherBloc, WeatherState>(
         listener: (context, state) {
           if (state is WeatherLoaded) {
+            BlocProvider.of<ThemeBloc>(context).add(
+              WeatherChanged(condition: state.weather.condition),
+            );
+
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
           }
@@ -42,35 +47,42 @@ class _WeatherPageState extends State<WeatherPage> {
           if (state is WeatherLoaded) {
             final weather = state.weather;
 
-            return RefreshIndicator(
-              onRefresh: () {
-                BlocProvider.of<WeatherBloc>(context).add(
-                  RefreshWeather(city: state.weather.location),
-                );
+            return BlocBuilder<ThemeBloc, ThemeState>(
+              builder: (context, themeState) {
+                return GradientContainer(
+                  color: themeState.color,
+                  child: RefreshIndicator(
+                    onRefresh: () {
+                      BlocProvider.of<WeatherBloc>(context).add(
+                        RefreshWeather(city: state.weather.location),
+                      );
 
-                return _refreshCompleter.future;
+                      return _refreshCompleter.future;
+                    },
+                    child: ListView(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 100.0),
+                          child: Center(
+                            child: Location(location: weather.location),
+                          ),
+                        ),
+                        Center(
+                          child: LastUpdated(dateTime: weather.lastUpdated),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 50.0),
+                          child: Center(
+                            child: CombinedWeatherTemperature(
+                              weather: weather,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               },
-              child: ListView(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 100.0),
-                    child: Center(
-                      child: Location(location: weather.location),
-                    ),
-                  ),
-                  Center(
-                    child: LastUpdated(dateTime: weather.lastUpdated),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 50.0),
-                    child: Center(
-                      child: CombinedWeatherTemperature(
-                        weather: weather,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             );
           }
 
